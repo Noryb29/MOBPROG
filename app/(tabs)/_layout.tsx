@@ -7,14 +7,14 @@ LogBox.ignoreAllLogs(true);
 export default function TabLayout() {
   return (
     <Tabs screenOptions={{tabBarActiveTintColor:"black", headerTintColor:"black"}}>
-      <Tabs.Screen name="index" options={{headerShown:false,
+      <Tabs.Screen name="Login" options={{headerShown:false,
          headerTitleAlign:"center", 
          headerLeft: () => <></>,
          tabBarIcon: ({ color, size }) => (
             <Icon name="lock-closed-outline" color={color} size={size} /> 
           ),
           }} />
-      <Tabs.Screen name="register" options={{headerShown:false,
+      <Tabs.Screen name="Register" options={{headerShown:false,
         headerTitleAlign:"center",
         tabBarIcon: ({ color, size }) => (
             <Icon name="key" color={color} size={size} /> 

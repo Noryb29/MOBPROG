@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Link } from 'expo-router';
+import { useRouter, Link } from 'expo-router'; 
 import supabase from "@/components/supabaseClient.js";
 
 export default function Index() {
@@ -12,24 +12,23 @@ export default function Index() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [focusedField, setFocusedField] = useState(''); 
-  // Refs for TextInput components
+
+  const router = useRouter(); 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  // Form validation schema
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   });
 
-  const handleRegistration = async (values) => {
+  const handleRegistration = async (values, { resetForm }) => {
     setLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
 
     try {
-      // Step 1: Sign up the user
       const { user, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -41,9 +40,8 @@ export default function Index() {
         return;
       }
 
-      // Step 2: Insert user details into the database
       const { data, error: insertError } = await supabase
-        .from('users') //TABLE NAMES
+        .from('users') 
         .insert([{ username: values.username, email: values.email }]);
 
       if (insertError) {
@@ -52,7 +50,12 @@ export default function Index() {
       } else {
         setSuccessMessage('Registration successful!'); 
         console.log('User registered successfully:', data);
+        resetForm(); 
         
+        setTimeout(() => {
+          setSuccessMessage(''); 
+          router.push('/(tabs)/Login');
+        }, 1000);
       }
     } catch (error) {
       setErrorMessage('Unexpected error: ' + error.message); 
@@ -132,7 +135,7 @@ export default function Index() {
           <View style={styles.accountOptions}>
             <Text>Already have an account? </Text>
             <TouchableOpacity>
-              <Link style={styles.createAccount} href={"/(tabs)"}>Login</Link>
+              <Link style={styles.createAccount} href={"/(tabs)/Login"}>Login</Link>
             </TouchableOpacity>
           </View>
         </View>
@@ -199,6 +202,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  successText: {
+    color: 'green',
     fontSize: 12,
     marginBottom: 10,
   },

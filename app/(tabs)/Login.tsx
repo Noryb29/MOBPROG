@@ -40,35 +40,22 @@ export default function Index() {
     clearMessages();
 
     const { email, password } = values;
-    const { user, session, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setErrorMessage(error.message);
     } else {
       setSuccessMessage('Logged in successfully!');
-      router.push('/(tabs)homepage'); 
+      setTimeout(() => {
+        router.push('/(tabs)/homepage'); 
+        setSuccessMessage('');
+      }, 1500); 
     }
 
     stopLoading();
   };
 
-  // const handleGoogleLogin = async () => {
-  //   startLoading();
-  //   clearMessages();
 
-  //   const { user, session, error } = await supabase.auth.signInWithOAuth({
-  //     provider: 'google',
-  //   });
-
-  //   if (error) {
-  //     setErrorMessage(error.message);
-  //   } else {
-  //     setSuccessMessage('Logged in successfully with Google!');
-  //     router.push('/(tabs)');
-  //   }
-
-  //   stopLoading();
-  // };
 
   return (
     <Formik
@@ -124,7 +111,7 @@ export default function Index() {
           <View style={styles.accountOptions}>
             <Text>New on our platform? </Text>
             <TouchableOpacity>
-              <Link style={styles.createAccount} href={"/(tabs)/register"}>Create an account</Link>
+              <Link style={styles.createAccount} href={"/(tabs)/Register"}>Create an account</Link>
             </TouchableOpacity>
           </View>
 
@@ -133,9 +120,7 @@ export default function Index() {
           <View style={styles.socialIcons}>
             <AntDesign name="twitter" size={30} color="blue" />
             <AntDesign name="facebook-square" size={30} color="blue" />
-            {/* <TouchableOpacity onPress={handleGoogleLogin}> */}
               <AntDesign name="google" size={30} color="red" />
-            {/* </TouchableOpacity> */}
           </View>
         </View>
       )}
@@ -206,7 +191,7 @@ const styles = StyleSheet.create({
   socialIcons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginHorizontal: 50,
+    marginHorizontal: 20,
   },
   eyeButton: {
     marginEnd: 0,

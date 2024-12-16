@@ -8,8 +8,8 @@ export default function NotFoundScreen() {
        headerLeft: ()=> <></>,
        headerTitleAlign:"center"}}/>
     <View style={styles.container}>
-      <Link style={styles.link} href="/">Please Login First</Link>
-      <Text style={styles.regtext}>Dont have an Account?<Link style={styles.reglink} href="/(tabs)/register">Register</Link></Text>
+      <Link style={styles.link} href="/(tabs)/Login">Please Login First</Link>
+      <Text style={styles.regtext}>Dont have an Account?<Link style={styles.reglink} href="/(tabs)/Register">Register</Link></Text>
       
       </View>
     </>
